@@ -117,7 +117,7 @@ export default function Home() {
           />
         </div>
       </section>
-      <section className="flex flex-col justify-center">
+      <section className="flex flex-col justify-center py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
             <h2 className="mt-2 text-4xl font-semibold tracking-tight text-pretty sm:text-5xl lg:text-balance">
@@ -149,6 +149,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <section className="flex flex-col justify-center py-24  sm:py-32"></section>
       <Footer />
     </>
   );
