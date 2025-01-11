@@ -1,6 +1,6 @@
 
 
-import { Sails, TransactionBuilder } from "sails-js";
+import { Sails, TransactionBuilder, ZERO_ADDRESS } from "sails-js";
 import { SailsIdlParser } from "sails-js-parser";
 import { KeyringPair, KeyringPair$Json } from '@polkadot/keyring/types';
 import { GearApi, GearKeyring, HexString, IUpdateVoucherParams } from "@gear-js/api";
@@ -716,7 +716,7 @@ export class SailsCalls {
 
                 const address = userId
                     ? userId
-                    : '0x0000000000000000000000000000000000000000000000000000000000000000'
+                    : ZERO_ADDRESS;
 
                 const queryResponse = callArguments
                     ? await queryMethod(address, undefined, undefined, ...callArguments)

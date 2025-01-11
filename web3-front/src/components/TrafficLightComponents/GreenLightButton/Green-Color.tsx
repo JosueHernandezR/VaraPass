@@ -67,6 +67,9 @@ const GreenColor = () => {
       return;
     }
 
+    console.log(decodeAddress(signer.address));
+    
+
     try {
       const response = await sails.command(
         'TrafficLight/Green',

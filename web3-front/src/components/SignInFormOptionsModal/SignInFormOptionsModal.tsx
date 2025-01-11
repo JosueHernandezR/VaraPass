@@ -77,6 +77,9 @@ export const SignInFormOptionsModal = ({ closeForm, onGetKeyring }: Props) => {
         const encryptedName = encryptString(name);  
         const encryptedPassword = encryptString(password);
 
+        console.log("pasara query");
+        
+
         let contractState: any = await sails.query(
             'Keyring/KeyringAddressFromUserCodedName',
             {
@@ -89,6 +92,9 @@ export const SignInFormOptionsModal = ({ closeForm, onGetKeyring }: Props) => {
         const { signlessAccountAddress } = contractState;
         let walletlessAccount: KeyringPair;
         let voucherId: HexString;
+
+        console.log("paso aca");
+        
 
         if (!signlessAccountAddress) {
             const newWalletlessAccount = await sails.createNewKeyringPair(name);
