@@ -9,3 +9,6 @@ Using ...
 
 ## varapass
 Using Flutter
+
+## Smart contract
+Using Rust and VNFT project
