@@ -12,7 +12,7 @@ import {
   sponsorMnemonic
 } from "./app/consts";
 import { GoogleAuthButton } from "@/components";
-import "@gear-js/vara-ui/dist/style.css";
+// import "@gear-js/vara-ui/dist/style.css";
 
 function Component() {
   const { isApiReady } = useApi();

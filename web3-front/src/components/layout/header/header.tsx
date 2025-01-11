@@ -5,7 +5,6 @@ import { useDappContext } from '@/Context';
 import { UserAccountDataModal } from '@/components/UserAccountDataModal/UserAccountData';
 import { UserIcon } from 'lucide-react';
 import { SignInFormOptionsModal } from '@/components/SignInFormOptionsModal/SignInFormOptionsModal';
-import styles from './header.module.scss';
 
 type Props = {
   isAccountVisible: boolean;
@@ -17,7 +16,7 @@ export function Header({ isAccountVisible }: Props) {
   const { sailsIsBusy } = useDappContext();
 
   return (
-    <header className={styles.header}>
+    <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
       <Logo />
       {
         isAccountVisible ? (

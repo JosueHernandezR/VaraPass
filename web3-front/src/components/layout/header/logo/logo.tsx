@@ -1,10 +1,14 @@
-import { Link } from 'react-router-dom';
-import './logo.module.scss';
+import { Link } from "react-router-dom";
 
 function Logo() {
   return (
     <Link to="/">
-      <h1>LOGO</h1>
+      <span className="sr-only">VaraPass</span>
+      <img
+        alt=""
+        src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
+        className="h-8 w-auto"
+      />
     </Link>
   );
 }
