@@ -1,36 +1,159 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Web3 abstraction Frontend
 
-## Getting Started
-
-First, run the development server:
+To install the dependencies you need to put in the console: 
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+yarn
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+And to run the frontend you have to use:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+yarn start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+To modify the contract id and IDL that you will use, open the file: src/app/consts.ts
 
-To learn more about Next.js, take a look at the following resources:
+There you will add your contract id and IDL, it will looks like this (you can use ContractSails interface): 
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```javascript
+export const CONTRACT_DATA: ContractSails = {
+  programId: '0x40ee053ed5af803a3c68fa432e11a38c99422bbdec815bbf745d536077d7587a',
+  idl: `
+    type IoTrafficLightState = struct {
+    current_light: str,
+        all_users: vec struct { actor_id, str },
+    };
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+    type TrafficLightEvent = enum {
+        Green,
+        Yellow,
+        Red,
+    };
 
-## Deploy on Vercel
+    constructor {
+        New : ();
+    };
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    service Query {
+        query TrafficLight : () -> IoTrafficLightState;
+    };
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+    service TrafficLight {
+        Green : () -> TrafficLightEvent;
+        Red : () -> TrafficLightEvent;
+        Yellow : () -> TrafficLightEvent;
+    };
+  `
+};
+```
+
+Then, you have to go to the file: src/app.tsx
+
+In the lines 17 to 21 you can set your contract id and IDL, it will looks like this:
+
+```javascript
+useInitSails({
+    network: 'wss://testnet.vara.network',
+    contractId: CONTRACT_DATA.programId,
+    idl: CONTRACT_DATA.idl
+});
+```
+
+This will initialize Sails in your frontend, or you can directly put the contract id and ILD in that part (useInitSails hook):
+
+```javascript
+useInitSails({
+    network: 'wss://testnet.vara.network',
+    contractId: '0x40ee053ed5af803a3c68fa432e11a38c99422bbdec815bbf745d536077d7587a',
+    idl: `
+        type IoTrafficLightState = struct {
+        current_light: str,
+            all_users: vec struct { actor_id, str },
+        };
+
+        type TrafficLightEvent = enum {
+            Green,
+            Yellow,
+            Red,
+        };
+
+        constructor {
+            New : ();
+        };
+
+        service Query {
+            query TrafficLight : () -> IoTrafficLightState;
+        };
+
+        service TrafficLight {
+            Green : () -> TrafficLightEvent;
+            Red : () -> TrafficLightEvent;
+            Yellow : () -> TrafficLightEvent;
+        };
+    `
+});
+```
+
+Finally, for example you can go to 'src/components/TrafficLightComponents/GreenLightButton/Green-Color.tsx', where you will see this line of code (line 11): 
+
+```javascript
+const sails = useSailsCalls();
+```
+
+This will give you the instance of Sails that was created when it was initialized (you can use it in any other component). And in the same file, you will find two examples for its use:
+
+```javascript
+// Send a message:
+const { signer } = await web3FromSource(accounts[0].meta.source);
+
+const response = await sails.command(
+    // 'Url': Service/Method
+    'TrafficLight/Green',
+    // Signer data
+    {
+        userAddress: account.decodedAddress,
+        signer
+    },
+    {
+        callbacks: {
+            onLoad() { alert.info('Will send a message'); },
+            onBlock(blockHash) { alert.success(`In block: ${blockHash}`); },
+            onSuccess() { alert.success('Message send!'); },
+            onError() { alert.error('Error while sending message'); }
+        }
+    }
+);
+const { signer } = await web3FromSource(account.meta.source);
+
+console.log(`Response from contract: ${response}`);
+```
+
+```javascript
+// Read state:
+const response = await sails.query(
+    'Query/TrafficLight',
+    {
+        userId: account.decodedAddress
+    }
+);
+
+console.log(response);
+```
+
+You will find a large amount of examples of each method of SailsCalls in its documentation (its in the same frontend, yo only need to put your mouse over the method!) that will help you build your dApp!
+
+## Google integration
+
+The template accepts logins with google, it will create a new wallet for the user and it will bind this wallet to the user google account.
+
+To set this attribute, you need to add your client key in the `src/app/hocs/index.tsx` file, in the 15 line:
+
+```typescript
+function GoogleAuthProvider({ children }: ProviderProps) {
+  return <GoogleOAuthProvider clientId='YOUR CLIENT ID'>{children}</GoogleOAuthProvider>;
+}
+
+```
